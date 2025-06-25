@@ -1,7 +1,7 @@
 from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 
-import Base
+from Base import Base
 
 class Usuario(Base):
     __tablename__ = 'usuarios'
