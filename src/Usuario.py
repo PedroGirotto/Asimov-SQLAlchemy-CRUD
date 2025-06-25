@@ -12,4 +12,4 @@ class Usuario(Base):
     acesso_gestor: Mapped[bool] = mapped_column(Boolean(), default=False)
 
     def __repr__(self):
-        return f'Usuario({self.id=}, {self.nome})'
+        return f'Usuario({self.id=}, {self.nome}=)'
