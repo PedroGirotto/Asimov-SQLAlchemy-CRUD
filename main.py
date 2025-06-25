@@ -1,13 +1,18 @@
+import os
+from dotenv import load_dotenv
+
 from sqlalchemy import create_engine, URL
 from src.Base import Base
 
+load_dotenv()
+
 url_object = URL.create(
-    'postgresql+psycopg2',
-    username = 'postgre', # UTILIZAR arquivo conf para não colocar info no git
-    password = 'LandOfPostgre7&', # UTILIZAR arquivo conf para não colocar info no git
-    host = 'localhost', # UTILIZAR arquivo conf para não colocar info no git
-    port = 5432,
-    database = 'asimov_sqlalchemy_project', # UTILIZAR arquivo conf para não colocar info no git
+    drivername = 'postgresql+psycopg2',
+    username = os.getenv('login'),
+    password = os.getenv('password'),
+    host = os.getenv('host'),
+    port = int(os.getenv('port'), 10),
+    database = os.getenv('database'),
 )
 
 

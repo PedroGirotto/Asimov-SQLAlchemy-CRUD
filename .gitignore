@@ -1,0 +1,5 @@
+# arquivo cache do python
+src/__pycache__/
+
+# arquivo de configuração
+*.env
