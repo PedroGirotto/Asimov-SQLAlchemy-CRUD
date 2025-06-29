@@ -1,5 +1,8 @@
-# arquivo cache do python
+# pastas
 src/__pycache__/
+.vscode/
+asimov-sqlalchemy/
 
-# arquivo de configuração
+# arquivos
 *.env
+*.code-workspace
