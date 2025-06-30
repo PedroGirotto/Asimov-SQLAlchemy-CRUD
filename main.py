@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 from sqlalchemy import create_engine, URL
-from src.Usuario import Usuario, criar_usuario
+from src.Usuario import Usuario, criar_usuario, ler_todos_usuarios, ler_usuario_id
 from src.Base import Base
 
 load_dotenv()
@@ -12,19 +12,22 @@ url_object = URL.create(
     username = os.getenv('LOGIN'),
     password = os.getenv('PASSWORD'),
     host = os.getenv('HOST'),
-    port = int(os.getenv('PORT'), 10),
+    port = int(os.getenv('PORT'), 10), # type: ignore
     database = os.getenv('DATABASE')
 )
 
 
-engine = create_engine(url_object, echo=True)
+engine = create_engine(url_object, echo=False)
 Base.metadata.create_all(bind=engine)
 
 
 if __name__ == '__main__':
-    criar_usuario(
-        engine,
-        nome='Pedro Girotto',
-        senha='pedro123456',
-        email='pedro.hs.girotto@gmail.com',
-        acesso_gestor=True)
+    # criar_usuario(
+    #     engine,
+    #     nome='Leonardo Maia',
+    #     senha='maia987654',
+    #     email='maia.leonardo@gmail.com',
+    #     acesso_gestor=False)
+
+    #print(ler_todos_usuarios(engine))
+    print(ler_usuario_id(engine, 3))
