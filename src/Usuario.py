@@ -22,17 +22,48 @@ class Usuario(Base): #representa minha tabela
 
 
 ### CRUD ###
-def criar_usuario(engine,nome:str,senha:str,email:str,acesso_gestor:bool = False):
+def criar_usuario(
+    engine,
+    nome:str,
+    senha:str,
+    email:str,
+    acesso_gestor:bool = False
+    ):
     with Session(bind = engine) as session:
         usuario = Usuario(nome=nome,senha=senha,email=email,acesso_gestor=acesso_gestor)
         session.add(usuario)
         session.commit()
 
+
 def ler_todos_usuarios(engine):
     with Session(bind = engine) as session:
         usuarios = session.execute(select(Usuario)).fetchall() 
         return [user[0] for user in usuarios]
-    
+
+
 def ler_usuario_id(engine, id:int):
     with Session(bind = engine) as session:
         return session.execute(select(Usuario).filter_by(id=id)).fetchall()
+
+
+def modificar_usuario(
+    engine,
+    id:int,
+    nome=None,
+    senha=None,
+    email=None,
+    acesso_gestor=None
+    ):
+    with Session(bind=engine) as session:
+        usuario = session.execute(select(Usuario).filter_by(id=id)).fetchall()
+        for atributos in usuario:
+            if nome:
+                atributos[0].nome = nome
+            if senha:
+                atributos[0].senha = senha
+            if email:
+                atributos[0].email = email
+            if acesso_gestor:
+                atributos[0].acesso_gestor = acesso_gestor
+            
+            session.commit()
