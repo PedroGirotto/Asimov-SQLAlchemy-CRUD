@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 from sqlalchemy import create_engine, URL
-from src.Usuario import Usuario, criar_usuario, ler_todos_usuarios, ler_usuario_id
+from src.Usuario import *
 from src.Base import Base
 
 load_dotenv()
@@ -22,6 +22,8 @@ Base.metadata.create_all(bind=engine)
 
 
 if __name__ == '__main__':
+    # teste básico das funções
+
     # criar_usuario(
     #     engine,
     #     nome='Leonardo Maia',
@@ -30,4 +32,8 @@ if __name__ == '__main__':
     #     acesso_gestor=False)
 
     #print(ler_todos_usuarios(engine))
-    print(ler_usuario_id(engine, 3))
+    #print(ler_usuario_id(engine, 3))
+    #modificar_usuario(engine, id=3, email='novo_mail@gmail.com')
+    #print(ler_usuario_id(engine, id=3))
+
+    deletar_usuario(engine, id=2)
