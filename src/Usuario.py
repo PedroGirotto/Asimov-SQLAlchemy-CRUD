@@ -134,3 +134,19 @@ def modificar_usuario(
                 setattr(usuario[0], key, value)
             
         session.commit()
+
+
+def deletar_usuario(engine, id:int):
+    '''
+    Descrição: Deleta um usuário com base no id passado.
+
+    Parâmetros: 
+        engine: Conexão com o banco de dados.
+        id (int): ID do usuário a ser modificado.
+    '''
+    with Session(bind=engine) as session:
+        usuario = session.execute(select(Usuario).filter_by(id=id)).fetchall()
+        for atributo in usuario:
+            session.delete(atributo[0])
+        
+        session.commit()
