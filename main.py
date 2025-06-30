@@ -27,13 +27,16 @@ if __name__ == '__main__':
     # criar_usuario(
     #     engine,
     #     nome='Leonardo Maia',
-    #     senha='maia987654',
-    #     email='maia.leonardo@gmail.com',
+    #     senha='mair_leonardo987123',
+    #     email='maia_leonardo@hotmail.com',
     #     acesso_gestor=False)
 
     #print(ler_todos_usuarios(engine))
-    #print(ler_usuario_id(engine, 3))
+    print(ler_usuario_id(engine, 3))
     #modificar_usuario(engine, id=3, email='novo_mail@gmail.com')
     #print(ler_usuario_id(engine, id=3))
 
-    deletar_usuario(engine, id=2)
+    #deletar_usuario(engine, id=2)
+
+    usuario = ler_usuario_id(engine, id=3)
+    print(f'Status do login: {usuario.verificar_senha('mair_leonardo987123')}')
