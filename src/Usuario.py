@@ -1,7 +1,7 @@
 from sqlalchemy import String, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, Session
 
-from Base import Base
+from src.Base import Base
 
 class Usuario(Base):
     __tablename__ = 'usuarios'
@@ -11,8 +11,7 @@ class Usuario(Base):
     email: Mapped[str] = mapped_column(String(30))
     acesso_gestor: Mapped[bool] = mapped_column(Boolean(), default=False)
 
-    def __init__(self, id, nome, senha, email, acesso_gestor):
-        self.id = id
+    def __init__(self, nome, senha, email, acesso_gestor):
         self.nome = nome
         self.senha = senha
         self.email = email
@@ -20,3 +19,11 @@ class Usuario(Base):
 
     def __repr__(self):
         return f'Usuario({self.id=}, {self.nome=})'
+
+
+### CRUD ###
+def criar_usuario(engine,nome:str,senha:str,email:str,acesso_gestor:bool = False):
+    with Session(bind = engine) as session:
+        usuario = Usuario(nome=nome,senha=senha,email=email,acesso_gestor=acesso_gestor)
+        session.add(usuario)
+        session.commit()
