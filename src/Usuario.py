@@ -32,3 +32,7 @@ def ler_todos_usuarios(engine):
     with Session(bind = engine) as session:
         usuarios = session.execute(select(Usuario)).fetchall() 
         return [user[0] for user in usuarios]
+    
+def ler_usuario_id(engine, id:int):
+    with Session(bind = engine) as session:
+        return session.execute(select(Usuario).filter_by(id=id)).fetchall()
