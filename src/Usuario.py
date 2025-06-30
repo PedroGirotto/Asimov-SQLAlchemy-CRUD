@@ -1,9 +1,9 @@
-from sqlalchemy import String, Boolean
+from sqlalchemy import String, Boolean, select
 from sqlalchemy.orm import Mapped, mapped_column, Session
 
 from src.Base import Base
 
-class Usuario(Base):
+class Usuario(Base): #representa minha tabela
     __tablename__ = 'usuarios'
     id: Mapped[int] = mapped_column(primary_key=True)
     nome: Mapped[str] = mapped_column(String(30))
@@ -27,3 +27,8 @@ def criar_usuario(engine,nome:str,senha:str,email:str,acesso_gestor:bool = False
         usuario = Usuario(nome=nome,senha=senha,email=email,acesso_gestor=acesso_gestor)
         session.add(usuario)
         session.commit()
+
+def ler_todos_usuarios(engine):
+    with Session(bind = engine) as session:
+        usuarios = session.execute(select(Usuario)).fetchall() 
+        return [user[0] for user in usuarios]
