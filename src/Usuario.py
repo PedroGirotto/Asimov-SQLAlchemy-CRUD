@@ -1,5 +1,6 @@
 from sqlalchemy import String, Boolean, select
 from sqlalchemy.orm import Mapped, mapped_column, Session
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from src.Base import Base
 
@@ -12,7 +13,7 @@ class Usuario(Base): #representa minha tabela
         __tablename__: Nome da tabela no banco: 'usuarios'.
         id: Chave primária do tipo int.
         nome: Nome do usuário (String(30)).
-        senha: Senha do usuário (String(30)).
+        senha: Senha do usuário (String(256)).
         email: Email do usuário (String(30)).
         acesso_gestor: Booleano que indica se o usuário tem acesso de gestor.
     '''
@@ -20,7 +21,7 @@ class Usuario(Base): #representa minha tabela
     __tablename__ = 'usuarios'
     id: Mapped[int] = mapped_column(primary_key=True)
     nome: Mapped[str] = mapped_column(String(30))
-    senha: Mapped[str] = mapped_column(String(30))
+    senha: Mapped[str] = mapped_column(String(256))
     email: Mapped[str] = mapped_column(String(30))
     acesso_gestor: Mapped[bool] = mapped_column(Boolean(), default=False)
 
@@ -40,6 +41,25 @@ class Usuario(Base): #representa minha tabela
         self.senha = senha
         self.email = email
         self.acesso_gestor = acesso_gestor
+
+
+    def definir_senha(self, senha):
+        '''
+        Descrição: Recebe uma string e criptografa para modificar o atributo senha com o novo valor
+        '''
+        
+        self.senha = generate_password_hash(senha)
+
+
+    def verificar_senha(self, senha):
+        '''
+        Descrição: Compara a string do parâmetro com a string criptografada salva
+
+        Retorno:
+            Valor booleano do resultado da comparação entre a string do parâmetro de entrada com a string senha do atributo do objeto
+        '''
+
+        return check_password_hash(self.senha, senha)
 
 
     def __repr__(self):
@@ -71,6 +91,7 @@ def criar_usuario(
 
     with Session(bind = engine) as session:
         usuario = Usuario(nome=nome,senha=senha,email=email,acesso_gestor=acesso_gestor)
+        usuario.definir_senha(senha)
         session.add(usuario)
         session.commit()
 
@@ -104,7 +125,7 @@ def ler_usuario_id(engine, id:int):
     '''
 
     with Session(bind = engine) as session:
-        return session.execute(select(Usuario).filter_by(id=id)).fetchall()
+        return session.execute(select(Usuario).filter_by(id=id)).fetchall()[0][0]
 
 
 def modificar_usuario(
@@ -131,7 +152,10 @@ def modificar_usuario(
         usuario = session.execute(select(Usuario).filter_by(id=id)).fetchall()
         for atributos in usuario:
             for key, value in kwargs.items():
-                setattr(usuario[0], key, value)
+                if key == 'senha':
+                    atributos[0].definir_senha(value)
+                else:
+                    setattr(usuario[0], key, value)
             
         session.commit()
 
