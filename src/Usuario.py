@@ -18,7 +18,7 @@ class Usuario(Base): #representa minha tabela
         acesso_gestor: Booleano que indica se o usuário tem acesso de gestor.
     '''
 
-    __tablename__ = 'usuarios'
+    __tablename__ = "usuarios"
     id: Mapped[int] = mapped_column(primary_key=True)
     nome: Mapped[str] = mapped_column(String(30))
     senha: Mapped[str] = mapped_column(String(256))
@@ -67,7 +67,7 @@ class Usuario(Base): #representa minha tabela
         Descrição: Retorna uma representação legível do objeto Usuario, útil para depuração.
         '''
 
-        return f'Usuario({self.id=}, {self.nome=})'
+        return f"Usuario({self.id=}, {self.nome=})"
 
 
 ### CRUD ###
@@ -152,7 +152,7 @@ def modificar_usuario(
         usuario = session.execute(select(Usuario).filter_by(id=id)).fetchall()
         for atributos in usuario:
             for key, value in kwargs.items():
-                if key == 'senha':
+                if key == "senha":
                     atributos[0].definir_senha(value)
                 else:
                     setattr(usuario[0], key, value)
